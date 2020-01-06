@@ -20,7 +20,8 @@ end
 
 #CHECK FORM REQUIRED SOFTWARE INSTALLATION
 #check for bettercap installation
-if(exec("gem list | grep 'bettercap' -c") < 1)
+
+if(%x(gem list | grep 'bettercap' -c) < 1)
   puts"Error: Bettercap must be installed as gem"
   abort("Error: Bettercap must be installed as gem")
 else
