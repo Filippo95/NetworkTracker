@@ -1,5 +1,5 @@
 #!/usr/bin/ruby
-require '/config.yaml'
+require "yaml"
 config=YAML.load_file('./config.yaml')
 
 #TAKE SOME CONFIGURATION from YAML
@@ -19,12 +19,12 @@ excluded_devices=config['EXCLUDED_DEVICES']
 
 #CHECK FORM REQUIRED SOFTWARE INSTALLATION
 #check for bettercap installation
-if(system("gem list | gerp 'bettercap' -c")<1)
+if(exec("gem list | grep 'bettercap' -c") < 1)
   puts"Error: Bettercap must be installed as gem"
   abort("Error: Bettercap must be installed as gem")
 end
 #check for arp-scan installation
-if(system("./is_installed.sh arp-scan")==0)
+if(exec("./is_installed.sh arp-scan")==0)
   puts"Error: arp-scan must be installed as gem"
   abort("Error: arp-scan must be installed as gem")
 end
@@ -32,6 +32,7 @@ end
 #Discover devices in network
 DevicesInNetwork=system("sudo arp-scan --localnet")
 
-puts "Secure Network \n this program will perform a MITM Attack without ssl script against every device in network using bettercap
-sudo bettercap -G GATEWAY --target DEVICE_IP --no-discovery  --sniffer"
+puts "Secure Network this program will perform a MITM Attack without ssl script against every device in network using bettercap sudo bettercap -G GATEWAY --target DEVICE_IP --no-discovery  --sniffer"
 puts DevicesInNetwork
+
+#fork{exec("ls")}
