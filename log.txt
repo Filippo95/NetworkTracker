@@ -1,2 +1,2 @@
 Exception Handled 
-near ".16": syntax error
+table comunication has 4 columns but 3 values were supplied
