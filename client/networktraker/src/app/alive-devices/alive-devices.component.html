@@ -1,0 +1,20 @@
+
+<table datatable [dtOptions]="dtOptions" class="row-border hover">
+  <thead>
+  <tr>
+    <th > IP</th>
+    <th  > MAC</th>
+    <th  >Name</th>
+  </tr>
+  </thead>
+
+  <tbody *ngIf="alived?.length >0">
+  <tr *ngFor="let dev of alived">
+    <td>{{ dev.IP }}</td>
+    <td>{{ dev.MAC }}</td>
+    <td>{{ dev.Name }}</td>
+  </tr>
+  </tbody>
+
+
+</table>
